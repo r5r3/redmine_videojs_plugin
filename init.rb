@@ -11,10 +11,10 @@ end
 # wiki macro for embedding videos
 Redmine::WikiFormatting::Macros.register do
     macro :video do |o, args|
-        @width = args[1].gsub(/\D/,'') if args[1]
-        @height = args[2].gsub(/\D/,'') if args[2]
-        @width ||= "auto"
-        @height ||= "auto"
+        width = args[1].gsub(/\D/,'') if args[1]
+        height = args[2].gsub(/\D/,'') if args[2]
+        width ||= "auto"
+        height ||= "auto"
         @num ||= 0
         @num = @num + 1
         attachment = o.attachments.find_by_filename(args[0]) if o.respond_to?('attachments')
@@ -26,7 +26,7 @@ Redmine::WikiFormatting::Macros.register do
         end
 out = <<END
 <div>
-<video id="video_#{@num}" class="video-js vjs-default-skin" controls preload="auto" width="#{@width}" height="#{@height}" data-setup='{}'>
+<video id="video_#{@num}" class="video-js vjs-default-skin" controls preload="auto" width="#{width}" height="#{height}" data-setup='{}'>
   <source src="#{file_url}" type="video/mp4">
 </video>
 <small>To view this video please enable JavaScript, and consider upgrading to a web browser
@@ -41,8 +41,8 @@ module RedmineVideojsPlugin
     class Hooks < Redmine::Hook::ViewListener
         # include video.js css and JavaScript files into the header
         def view_layouts_base_html_head(context={})
-            tags = [stylesheet_link_tag('http://vjs.zencdn.net/5.6.0/video-js.css')]
-            tags << javascript_include_tag('http://vjs.zencdn.net/5.6.0/video.min.js')
+            tags = [stylesheet_link_tag('https://vjs.zencdn.net/5.6.0/video-js.css')]
+            tags << javascript_include_tag('https://vjs.zencdn.net/5.6.0/video.min.js')
             return tags.join(' ')
         end
     end
