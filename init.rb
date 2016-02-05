@@ -13,8 +13,8 @@ Redmine::WikiFormatting::Macros.register do
     macro :video do |o, args|
         @width = args[1].gsub(/\D/,'') if args[1]
         @height = args[2].gsub(/\D/,'') if args[2]
-        @width ||= 640
-        @height ||= 480
+        @width ||= "auto"
+        @height ||= "auto"
         @num ||= 0
         @num = @num + 1
         attachment = o.attachments.find_by_filename(args[0]) if o.respond_to?('attachments')
