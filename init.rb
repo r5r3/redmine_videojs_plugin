@@ -22,18 +22,27 @@ Redmine::WikiFormatting::Macros.register do
             if arg.starts_with?("height=")
                 height = arg[7..-1]
             end
+            if arg.starts_with?("poster=")
+                poster = arg[7..-1]
+                preload = "none"
+            end
         end
         # default is automatic
         width ||= "auto"
         height ||= "auto"
+        poster ||= "none"
+        preload ||= "auto"
         # start html block for video
         out = "<div>\n"
-        out += "<video id=\"video_#{@num}\" class=\"video-js vjs-default-skin\" controls=\"controls\" preload=\"auto\" "
+        out += "<video id=\"video_#{@num}\" class=\"video-js vjs-default-skin\" controls=\"controls\" preload=\"#{preload}\" "
         if width != "auto"
             out += "width=\"#{width}\" "
         end
         if height != "auto"
             out += "height=\"#{height}\" "
+        end
+        if height != "none"
+            out += "poster=\"#{poster}\" "
         end
         out += "data-setup=\"{}\">\n"
         # find files in arguments
