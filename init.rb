@@ -28,19 +28,26 @@ Redmine::WikiFormatting::Macros.register do
         height ||= "auto"
         # start html block for video
         out = "<div>\n"
-        out += "<video id=\"video_#{@num}\" class=\"video-js vjs-default-skin\" controls preload=\"auto\" width=\"#{width}\" height=\"#{height}\" data-setup=\"{}\">\n"
+        out += "<video id=\"video_#{@num}\" class=\"video-js vjs-default-skin\" controls=\"controls\" preload=\"auto\" "
+        if width != "auto"
+            out += "width=\"#{width}\" "
+        end
+        if height != "auto"
+            out += "height=\"#{height}\" "
+        end
+        out += "data-setup=\"{}\">\n"
         # find files in arguments
         accepted_formats = [".mp4", ".webm"]
         for arg in args
             if accepted_formats.include? File.extname(arg)
                 attachment = o.attachments.find_by_filename(arg) if o.respond_to?('attachments')
                 if attachment
-                    file_url = url_for(:only_path => true, :controller => 'attachments', :action => 'download', :id => attachment, :filename => attachment.filename)
+                    file_url = url_for(:only_path => false, :controller => 'attachments', :action => 'show', :id => attachment, :filename => attachment.filename)
                 else
                     file_url = arg.gsub(/<.*?>/, '').gsub(/&lt;.*&gt;/,'')
                 end
                 file_format = File.extname(arg)
-                out += "<source src=\"#{file_url}\" type=\"video/#{file_format[1..-1]}\">\n"
+                out += "<source src=\"#{file_url}\" type=\'video/#{file_format[1..-1]}\'>\n"
             end
         end
         # finalize video html block
